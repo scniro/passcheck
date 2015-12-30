@@ -1,0 +1,32 @@
+{
+  "name": "passcheck",
+  "version": "0.0.1",
+  "description": "",
+  "main": "passcheck.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scniro/passcheck.git"
+  },
+  "author": "scniro <salvatore.niro@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scniro/passcheck/issues"
+  },
+  "keywords": [
+  ],
+  "homepage": "https://github.com/scniro/passcheck#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "engines": {
+    "node": ">=4.0"
+  }
+}
