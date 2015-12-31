@@ -1,13 +1,13 @@
 {
   "name": "passcheck",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "todo",
   "main": "passcheck.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/scniro/passcheck.git"
   },
-  "author": "scniro <salvatore.niro@outlook.com>",
+  "author": "scniro <scniro@outlook.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/scniro/passcheck/issues"
