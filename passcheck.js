@@ -2,7 +2,9 @@ function passcheck() {
 
     var self = this;
 
-    self.configuration = getDefaultConfig();
+    var common;
+
+    var defaults = getDefaultConfig();
 
     function getDefaultConfig() {
         return {
@@ -36,7 +38,7 @@ function passcheck() {
         get: function () {
             return self.configuration
         },
-        set: function (options) {
+        set: function (options, internal) {
             function merge(config, options) {
 
                 for (var p in options) {
@@ -52,14 +54,21 @@ function passcheck() {
             }
 
             self.configuration = merge(getDefaultConfig(), options)
+
+            if (!internal)
+                init();
         }
     }
+
+    config.set(defaults, true)
 
     function eval(value) {
 
         var result = {'weak': false, 'medium': false, 'strong': false, 'score': 0};
 
         var tier = 0;
+
+        console.log(common.length)
 
         if (new RegExp(self.configuration.policies.strong.pattern + '.{' + self.configuration.policies.strong.min + ',}$').test(value)) {
             result.strong = true;
@@ -129,10 +138,28 @@ function passcheck() {
         return n;
     }
 
+    function init() {
+
+        if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+            var fs = require('fs');
+            common =  self.configuration.testCommon && self.configuration.testCommon.limit ?
+                fs.readFileSync('./passwords.txt').toString().split('\n').slice(0, self.configuration.testCommon.limit) :
+                fs.readFileSync('./passwords.txt').toString().split('\n');
+        } else {
+            // angular place passwords in memory
+        }
+    }
+
     return {
         config: config,
         eval: eval
     }
 }
 
-module.exports = new passcheck();
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = new passcheck();
+}
+
+if (typeof window !== 'undefined') {
+    window.passcheck = new passcheck();
+}
