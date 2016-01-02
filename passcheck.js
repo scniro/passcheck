@@ -2,7 +2,10 @@ function passcheck() {
 
     var self = this;
 
-    var common;
+    var common = {
+        test: false,
+        dictionary: []
+    }
 
     var defaults = getDefaultConfig();
 
@@ -30,6 +33,9 @@ function passcheck() {
                     max: 100,
                     bonus: 1.50
                 }
+            },
+            common: {
+                test: false
             }
         };
     }
@@ -68,7 +74,11 @@ function passcheck() {
 
         var tier = 0;
 
-        console.log(common.length)
+        if (common.test) {
+            if (common.dictionary.indexOf(value) > -1) {
+                console.log('common')
+            }
+        }
 
         if (new RegExp(self.configuration.policies.strong.pattern + '.{' + self.configuration.policies.strong.min + ',}$').test(value)) {
             result.strong = true;
@@ -141,10 +151,20 @@ function passcheck() {
     function init() {
 
         if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-            var fs = require('fs');
-            common =  self.configuration.testCommon && self.configuration.testCommon.limit ?
-                fs.readFileSync('./passwords.txt').toString().split('\n').slice(0, self.configuration.testCommon.limit) :
-                fs.readFileSync('./passwords.txt').toString().split('\n');
+
+            if (self.configuration.common && self.configuration.common.test) {
+                var limit = self.configuration.common && self.configuration.common.limit || 10000;
+
+                var fs = require('fs');
+                common.test = true;
+                var arr = limit !== 10000 ?
+                    fs.readFileSync('./passwords.txt').toString().split('\n').slice(0, limit) :
+                    fs.readFileSync('./passwords.txt').toString().split('\n');
+
+                for (var i in arr)
+                    common.dictionary.push(arr[i].trim())
+            }
+
         } else {
             // angular place passwords in memory
         }
