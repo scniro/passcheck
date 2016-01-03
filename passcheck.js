@@ -2,10 +2,7 @@ function passcheck() {
 
     var self = this;
 
-    var common = {
-        test: false,
-        dictionary: []
-    }
+    var common = [];
 
     var defaults = getDefaultConfig();
 
@@ -42,14 +39,14 @@ function passcheck() {
 
     var config = {
         get: function () {
-            return self.configuration
+            return self.configuration;
         },
         set: function (options, internal) {
             function merge(config, options) {
 
                 for (var p in options) {
                     try {
-                        options[p].constructor == Object ? config[p] = merge(config[p], options[p]) : config[p] = options[p]
+                        options[p].constructor === Object ? config[p] = merge(config[p], options[p]) : config[p] = options[p];
                     }
                     catch (e) {
                         config[p] = options[p];
@@ -59,24 +56,26 @@ function passcheck() {
                 return config;
             }
 
-            self.configuration = merge(getDefaultConfig(), options)
+            self.configuration = merge(getDefaultConfig(), options);
 
             if (!internal)
-                init();
+                return init();
         }
     }
 
-    config.set(defaults, true)
+    config.set(defaults, true);
 
     function eval(value) {
 
-        var result = {'weak': false, 'medium': false, 'strong': false, 'score': 0};
-
+        var result = { 'weak': false, 'medium': false, 'strong': false, 'score': 0 };
         var tier = 0;
 
-        if (common.test) {
-            if (common.dictionary.indexOf(value) > -1) {
-                console.log('common')
+        if (self.configuration.common.test) {
+            if (common.indexOf(value) > -1) {
+                result.score = 0;
+                result.weak = true;
+                result.common = true;
+                return result;
             }
         }
 
@@ -98,9 +97,9 @@ function passcheck() {
     function score(value, tier) {
 
         var special = {
-            'specialCharacters': {'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0},
-            'capitalCharacters': {'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0},
-            'numericCharacters': {'count': /\d+/.test(value) ? value.match(/\d/g).length : 0}
+            'specialCharacters': { 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0 },
+            'capitalCharacters': { 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0 },
+            'numericCharacters': { 'count': /\d+/.test(value) ? value.match(/\d/g).length : 0 }
         }
 
         var bonus = 0;
@@ -153,20 +152,34 @@ function passcheck() {
         if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 
             if (self.configuration.common && self.configuration.common.test) {
-                var limit = self.configuration.common && self.configuration.common.limit || 10000;
 
+                var limit = self.configuration.common && self.configuration.common.limit || 10000;
                 var fs = require('fs');
-                common.test = true;
                 var arr = limit !== 10000 ?
                     fs.readFileSync('./passwords.txt').toString().split('\n').slice(0, limit) :
                     fs.readFileSync('./passwords.txt').toString().split('\n');
 
                 for (var i in arr)
-                    common.dictionary.push(arr[i].trim())
+                    common.push(arr[i].trim());
             }
-
         } else {
-            // angular place passwords in memory
+
+            var $http = angular.injector(['ng']).get('$http');
+            var $q = angular.injector(['ng']).get('$q');
+
+            var deferred = $q.defer();
+
+            $http.get(self.configuration.common.path).then(function (response) {
+
+                var arr = response.data.split('\n').slice(0, self.configuration.common.limit || 10000);
+
+                for (var i in arr)
+                    common.push(arr[i].trim());
+
+                deferred.resolve(common);
+            });
+
+            return deferred.promise;
         }
     }
 

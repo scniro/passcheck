@@ -12,12 +12,12 @@
   "bugs": {
     "url": "https://github.com/scniro/passcheck/issues"
   },
-  "keywords": [
-  ],
+  "keywords": [],
   "homepage": "https://github.com/scniro/passcheck#readme",
   "devDependencies": {
     "chai": "^3.4.1",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-mocha": "^2.2.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",

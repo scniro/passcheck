@@ -44,6 +44,9 @@ describe('passcheck tests:config', function () {
                 max: 100,
                 bonus: 1.50
             }
+        },
+        common: {
+            test: false
         }
     };
 
