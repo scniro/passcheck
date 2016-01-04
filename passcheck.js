@@ -67,7 +67,7 @@ function passcheck() {
 
     function eval(value) {
 
-        var result = { 'weak': false, 'medium': false, 'strong': false, 'score': 0 };
+        var result = {'weak': false, 'medium': false, 'strong': false, 'score': 0};
         var tier = 0;
 
         if (self.configuration.common.test) {
@@ -97,9 +97,9 @@ function passcheck() {
     function score(value, tier) {
 
         var special = {
-            'specialCharacters': { 'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0 },
-            'capitalCharacters': { 'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0 },
-            'numericCharacters': { 'count': /\d+/.test(value) ? value.match(/\d/g).length : 0 }
+            'specialCharacters': {'count': /[^\w\s]/.test(value) ? value.match(/[^\w\s]/g).length : 0},
+            'capitalCharacters': {'count': /[A-Z]/.test(value) ? value.match(/[A-Z]/g).length : 0},
+            'numericCharacters': {'count': /\d+/.test(value) ? value.match(/\d/g).length : 0}
         }
 
         var bonus = 0;
@@ -155,14 +155,11 @@ function passcheck() {
 
                 var limit = self.configuration.common && self.configuration.common.limit || 10000;
                 var fs = require('fs');
-                var arr = limit !== 10000 ?
-                    fs.readFileSync('./passwords.txt').toString().split('\n').slice(0, limit) :
-                    fs.readFileSync('./passwords.txt').toString().split('\n');
+                var dictionary = require('./passwords.json').dictionary
 
-                for (var i in arr)
-                    common.push(arr[i].trim());
+                common = limit !== 10000 ? dictionary.slice(0, limit) : dictionary
             }
-        } else {
+        } else if (typeof angular !== 'undefined') {
 
             var $http = angular.injector(['ng']).get('$http');
             var $q = angular.injector(['ng']).get('$q');
@@ -180,6 +177,8 @@ function passcheck() {
             });
 
             return deferred.promise;
+        } else {
+            self.configuration.common.test = false;
         }
     }
 
