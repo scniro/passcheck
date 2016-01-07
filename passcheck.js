@@ -149,36 +149,32 @@ function passcheck() {
 
     function init() {
 
-        if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        if (self.configuration.common && self.configuration.common.test) {
 
-            if (self.configuration.common && self.configuration.common.test) {
+            var limit = self.configuration.common && self.configuration.common.limit || 10000;
 
-                var limit = self.configuration.common && self.configuration.common.limit || 10000;
+            if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+
                 var fs = require('fs');
                 var dictionary = require('./passwords.json').dictionary
 
                 common = limit !== 10000 ? dictionary.slice(0, limit) : dictionary
+
+            } else if (typeof angular !== 'undefined') {
+
+                var $http = angular.injector(['ng']).get('$http');
+                var $q = angular.injector(['ng']).get('$q');
+                var deferred = $q.defer();
+
+                $http.get(self.configuration.common.path).then(function (response) {
+                    common = limit !== 10000 ? response.data.dictionary.slice(0, limit) : response.data.dictionary;
+                    deferred.resolve(common);
+                });
+
+                return deferred.promise;
+            } else {
+                self.configuration.common.test = false;
             }
-        } else if (typeof angular !== 'undefined') {
-
-            var $http = angular.injector(['ng']).get('$http');
-            var $q = angular.injector(['ng']).get('$q');
-
-            var deferred = $q.defer();
-
-            $http.get(self.configuration.common.path).then(function (response) {
-
-                var arr = response.data.split('\n').slice(0, self.configuration.common.limit || 10000);
-
-                for (var i in arr)
-                    common.push(arr[i].trim());
-
-                deferred.resolve(common);
-            });
-
-            return deferred.promise;
-        } else {
-            self.configuration.common.test = false;
         }
     }
 

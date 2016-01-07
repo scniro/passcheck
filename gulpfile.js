@@ -32,4 +32,5 @@ gulp.task('passwords', function() {
     var result = lines.filter(isNotEmpty).map(parseLine);
     var json = JSON.stringify({ 'dictionary': result });
     fs.writeFileSync('passwords.json', json);
+    fs.writeFileSync('C:/Development/GitHub/ngPasscheck/ngPasscheck/ng-passcheck/passwords.json', json);
 });
