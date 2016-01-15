@@ -94,9 +94,9 @@ describe('passcheck tests:eval', function () {
     });
 
     it('should return the password result: medium - default configuration', function(){
-        var result = passcheck.eval('pass');
-        expect(result.weak).to.be.true;
-        expect(result.medium).to.be.false;
+        var result = passcheck.eval('Passs1');
+        expect(result.weak).to.be.false;
+        expect(result.medium).to.be.true;
         expect(result.strong).to.be.false;
     });
 
