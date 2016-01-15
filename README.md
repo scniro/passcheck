@@ -7,3 +7,9 @@ a policy driven password strength checker
 ```
 npm install passcheck
 ```
+
+### api
+
+```javascript
+var passcheck = require('./passcheck'); // -- nodejs. window.passcheck -- browser
+```
