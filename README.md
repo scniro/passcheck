@@ -14,8 +14,11 @@ npm install passcheck
 var passcheck = require('./passcheck'); // -- nodejs. window.passcheck -- browser
 ```
 
-##### `passcheck.config(options)`
- - overrides the default configuration
+##### `passcheck.config.get()`
+ - returns the configuration
+
+##### `passcheck.config.set(options)`
+ - sets and overrides the default configuration
 
  ##### `passcheck.eval('password')`
   - returns results
