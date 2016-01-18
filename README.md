@@ -4,6 +4,8 @@
 
 a policy driven password strength checker
 
+- [AngularJS wrapper/api](http://ng-passcheck.azurewebsites.net/)
+
 ```
 <npm|bower> install passcheck
 ```
@@ -22,6 +24,9 @@ var passcheck = require('./passcheck'); // -- nodejs. window.passcheck -- browse
 
 ##### `passcheck.eval('password')`
  - returns results
+
+
+ http://ng-passcheck.azurewebsites.net/
 
 ```javascript
 

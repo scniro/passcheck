@@ -1,0 +1,5 @@
+**/.*
+.*
+gulpfile.js
+passcheck.test.js
+bower.json

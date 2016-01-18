@@ -1,6 +1,3 @@
-/**
- * Created by Sal on 12/31/2015.
- */
 var gulp = require('gulp');
 var mocha = require('gulp-mocha');
 var gutil = require('gulp-util');
