@@ -106,4 +106,40 @@ describe('passcheck tests:eval', function () {
         expect(result.medium).to.be.false;
         expect(result.strong).to.be.true;
     });
+
+    it('should return the password result: strong - defined configuration', function(){
+
+        passcheck.config.set({
+            policies: {
+                strong: {
+                    pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\\w\\s])',
+                    min: 12
+                }
+            },
+        });
+
+        var prior = passcheck.eval('Passs12!')
+        var result = passcheck.eval('Paaaaaaaaasss12!');
+        expect(result.weak).to.be.false;
+        expect(result.medium).to.be.false;
+        expect(result.strong).to.be.true;
+        expect(prior.strong).to.be.false;
+    });
+
+    it('should return the password result: weak/common - defined configuration with common check', function(){
+
+        passcheck.config.set({
+            common: {
+                test: true,
+                path: './passwords.json' // 10k common passwords
+            }
+        });
+
+        var prior = passcheck.eval('Passs12!')
+        var result = passcheck.eval('Paaaaaaaaasss12!');
+        expect(result.weak).to.be.false;
+        expect(result.medium).to.be.false;
+        expect(result.strong).to.be.true;
+        expect(prior.strong).to.be.false;
+    });
 });

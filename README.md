@@ -5,7 +5,7 @@
 a policy driven password strength checker
 
 ```
-npm install passcheck
+<npm|bower> install passcheck
 ```
 
 ### api
@@ -20,9 +20,25 @@ var passcheck = require('./passcheck'); // -- nodejs. window.passcheck -- browse
 ##### `passcheck.config.set(options)`
  - sets and overrides the default configuration
 
- ##### `passcheck.eval('password')`
-  - returns results
+##### `passcheck.eval('password')`
+ - returns results
 
 ```javascript
-// -- demo
+
+
+var result = passcheck.eval('Password123!');
+
+// { weak: false, medium: false, strong: true, score: 76.5 }
+
+passcheck.config.set({
+    common: {
+        test: true,
+        path: './passwords.json' // 10k common passwords
+    }
+});
+
+var result = passcheck.eval('password');
+
+// { weak: true, medium: false, strong: false, score: 0, common: true }
+
 ```
