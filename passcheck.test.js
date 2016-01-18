@@ -135,11 +135,14 @@ describe('passcheck tests:eval', function () {
             }
         });
 
-        var prior = passcheck.eval('Passs12!')
-        var result = passcheck.eval('Paaaaaaaaasss12!');
-        expect(result.weak).to.be.false;
-        expect(result.medium).to.be.false;
-        expect(result.strong).to.be.true;
-        expect(prior.strong).to.be.false;
+        var weak1 = passcheck.eval('password')
+        var weak2 = passcheck.eval('letmein')
+        var control = passcheck.eval('Password1!')
+
+        expect(weak1.weak).to.be.true;
+        expect(weak1.common).to.be.true;
+        expect(weak2.weak).to.be.true;
+        expect(weak2.common).to.be.true;
+        expect(control.common).to.be.undefined;
     });
 });
