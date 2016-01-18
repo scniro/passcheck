@@ -1,6 +1,8 @@
 # passcheck
 
 [![Build Status](https://api.travis-ci.org/scniro/passcheck.svg)](https://travis-ci.org/scniro/passcheck)
+[![NPM Version](https://img.shields.io/npm/v/passcheck.svg?style=flat)](https://www.npmjs.org/package/passcheck)
+
 
 a policy driven password strength checker
 
